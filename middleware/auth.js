@@ -11,6 +11,8 @@ module.exports = (req, res, next) => {
     const decodedToken = jwt.verify(token, "RANDOM_TOKEN_SECRET");
     // On récupère l'user ID dans le token décodé
     const userId = decodedToken.userId;
+    // On ajoute ajoute l'user ID dans la requête pour éviter une faille de sécurité lors de la suppression
+    req.auth = { userId };
     // Si l'user ID contenu dans la requête est différent de celui contenu dans le token
     if (req.body.userId && req.body.userId !== userId) {
       // On renvoie un message d'erreur
