@@ -19,6 +19,7 @@ const app = express();
 // Permet d'analyser le corps de la requête
 app.use(express.json());
 
+// ???
 app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader(
@@ -35,6 +36,10 @@ app.use((req, res, next) => {
 // On importe le routeur d'utilisateurs dans l'API
 const userRoutes = require("./routes/user");
 app.use("/api/auth", userRoutes);
+
+// L'accès aux images doit être géré de façon statique
+const path = require("path");
+app.use("/images", express.static(path.join(__dirname, "images")));
 
 // On exporte l'API créée
 module.exports = app;
