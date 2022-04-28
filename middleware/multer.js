@@ -21,7 +21,7 @@ const storage = multer.diskStorage({
     // On supprime les espaces dans le nom de fichier et on les remplace par des underscore
     const name = file.originalname.split(" ").join("_");
     // On définit l'extension grâce à notre dictionnaire
-    const extension = MIME_TYPES(file.mimetype);
+    const extension = MIME_TYPES[file.mimetype];
     // Le nom du fichier envoyé sera composé de son nom auquel on ajoute la date d'envoi
     callback(null, name + Date.now() + "." + extension);
   },

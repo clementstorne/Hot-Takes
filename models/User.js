@@ -6,10 +6,10 @@ const uniqueValidator = require("mongoose-unique-validator");
 
 // On créer un modèle d'utilisateur
 const userSchema = mongoose.Schema({
-  // L'email est de type string et il est obligatoire
+  // L'email de l'utilisateur
   // Il ne peut y avoir qu'un seul utilisateur par email
   email: { type: String, required: true, unique: true },
-  // Le mot de passe est de type string et il est obligatoire
+  // Le mot de passe de l'utilisateur
   password: { type: String, required: true },
 });
 
