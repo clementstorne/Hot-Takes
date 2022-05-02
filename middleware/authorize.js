@@ -8,7 +8,7 @@ module.exports = (req, res, next) => {
     // split créer un tableau avec les sous-chaînes séparées par un espace
     const token = req.headers.authorization.split(" ")[1];
     // On décode le token avec la clé choisie précédemment
-    const decodedToken = jwt.verify(token, "RANDOM_TOKEN_SECRET");
+    const decodedToken = jwt.verify(token, process.env.JWT_SECRET_TOKEN);
     // On récupère l'user ID dans le token décodé
     const userId = decodedToken.userId;
     // On ajoute ajoute l'user ID dans la requête pour éviter une faille de sécurité lors de la suppression

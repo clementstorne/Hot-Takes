@@ -1,12 +1,22 @@
+// On utilise dotenv pour appeler les variables d'environnement
+require("dotenv").config();
+
+// On utilise helmet pour se protéger de certaines des vulnérabilités en configurant des en-têtes HTTP
+const helmet = require("helmet");
+// app.use(helmet());
+
 // On importe mongoose qui fait le lien entre Express et MongoDB
 const mongoose = require("mongoose");
 
+// On construit l'URL pour se connecter à la BDD
+const connectionString = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@cluster0.4nsox.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
+
 // On se connecte à MongoDB grâce à mongoose
 mongoose
-  .connect(
-    "mongodb+srv://admin:azerty@cluster0.4nsox.mongodb.net/myFirstDatabase?retryWrites=true&w=majority",
-    { useNewUrlParser: true, useUnifiedTopology: true }
-  )
+  .connect(connectionString, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
   .then(() => console.log("Connexion à MongoDB réussie !"))
   .catch(() => console.log("Connexion à MongoDB échouée !"));
 

@@ -55,9 +55,13 @@ exports.login = (req, res, next) => {
             // L'objet contient l'ID de l'utilisateur
             userId: user._id,
             // On génère un token codé avec la chaîne de caractères "RANDOM_TOKEN_SECRET" qui a une validité de 24 heures
-            token: jwt.sign({ userId: user._id }, "RANDOM_TOKEN_SECRET", {
-              expiresIn: "24h",
-            }),
+            token: jwt.sign(
+              { userId: user._id },
+              process.env.JWT_SECRET_TOKEN,
+              {
+                expiresIn: "24h",
+              }
+            ),
           });
         })
         // On renvoie le code 500 (Internal Server Error) ainsi que l'erreur
