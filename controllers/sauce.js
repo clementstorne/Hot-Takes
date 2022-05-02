@@ -69,32 +69,40 @@ exports.createSauce = (req, res, next) => {
 
 // On définit la fonction qui permet de modifier une sauce
 exports.modifySauce = (req, res, next) => {
-  // Le comportement est différent si la requête comporte un fichier ou non
-  const sauceObject = req.file
-    ? {
-        // S'il y a une image, on convertit l'objet contenu dans le corps de la requête au format JS
-        ...JSON.parse(req.body.sauce),
-        // On définit l'URL de l'image avec le protocole utilisé, le serveur et le nom du fichier
-        imageUrl: `${req.protocol}://${req.get("host")}/images/${
-          req.file.filename
-        }`,
-      }
-    : // S'il n'y a pas d'image, on procède comme précédemment en récupérant le corps de la requête
-      { ...req.body };
-  Sauce.updateOne(
-    // On met à jour l'ID avec celui contenu dans la requête
-    { _id: req.params.id },
-    // On met à jour les informations avec celles contenues dans la requête
-    { ...sauceObject, _id: req.params.id }
-  )
-    .then(() => {
-      // On renvoie le code 200 (OK) ainsi qu'un message de confirmation
-      res.status(200).json({ message: "Sauce mise à jour avec succès" });
-    })
-    .catch((error) =>
-      // On renvoie le code 400 (Bad Request) ainsi que l'erreur
-      res.status(400).json({ error })
-    );
+  // On cherche la sauce dont l'ID correspond à celui contenu dans la requête
+  Sauce.findOne({ _id: req.params.id }).then((sauce) => {
+    // On récupère le nom du fichier image
+    const filename = sauce.imageUrl.split("/images/")[1];
+    // On supprime l'image puis l'objet
+    fs.unlink(`images/${filename}`, () => {
+      // Le comportement est différent si la requête comporte un fichier ou non
+      const sauceObject = req.file
+        ? {
+            // S'il y a une image, on convertit l'objet contenu dans le corps de la requête au format JS
+            ...JSON.parse(req.body.sauce),
+            // On définit l'URL de l'image avec le protocole utilisé, le serveur et le nom du fichier
+            imageUrl: `${req.protocol}://${req.get("host")}/images/${
+              req.file.filename
+            }`,
+          }
+        : // S'il n'y a pas d'image, on procède comme précédemment en récupérant le corps de la requête
+          { ...req.body };
+      Sauce.updateOne(
+        // On met à jour l'ID avec celui contenu dans la requête
+        { _id: req.params.id },
+        // On met à jour les informations avec celles contenues dans la requête
+        { ...sauceObject, _id: req.params.id }
+      )
+        .then(() => {
+          // On renvoie le code 200 (OK) ainsi qu'un message de confirmation
+          res.status(200).json({ message: "Sauce mise à jour avec succès" });
+        })
+        .catch((error) =>
+          // On renvoie le code 400 (Bad Request) ainsi que l'erreur
+          res.status(400).json({ error })
+        );
+    });
+  });
 };
 
 // On définit la fonction qui permet de supprimer une sauce
@@ -136,7 +144,6 @@ exports.deleteSauce = (req, res, next) => {
 
 // On définit la fonction qui permet de liker/disliker une sauce
 exports.likeSauce = (req, res, next) => {
-<<<<<<< HEAD
   // On cherche la sauce dont l'ID correspond à celui contenu dans la requête
   Sauce.findOne({ _id: req.params.id }).then((sauce) => {
     // Si la sauce n'existe pas dans la BDD
@@ -213,13 +220,4 @@ exports.likeSauce = (req, res, next) => {
       res.status(200).json({ message: "Avis pris en compte" });
     });
   });
-=======
-  // Si la sauce n'existe pas dans la BDD
-  if (!sauce) {
-    // On renvoie le code 404 (Not Found) ainsi qu'une nouvelle erreur
-    res.status(404).json({
-      error: new Error("Cette sauce n'existe pas"),
-    });
-  }
->>>>>>> refs/remotes/origin/main
 };
