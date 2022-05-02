@@ -1,4 +1,4 @@
-// On utilise dotenv pour appeler les variables d'environnement
+// On utilise dotenv pour appeler les variables d'environnement (données sensibles)
 require("dotenv").config();
 
 // On utilise helmet pour se protéger de certaines des vulnérabilités en configurant des en-têtes HTTP
