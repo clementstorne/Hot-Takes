@@ -212,4 +212,3 @@ exports.likeSauce = (req, res, next) => {
       res.status(200).json({ message: "Avis pris en compte" });
     });
   });
-};
