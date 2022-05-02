@@ -136,6 +136,7 @@ exports.deleteSauce = (req, res, next) => {
 
 // On définit la fonction qui permet de liker/disliker une sauce
 exports.likeSauce = (req, res, next) => {
+<<<<<<< HEAD
   // On cherche la sauce dont l'ID correspond à celui contenu dans la requête
   Sauce.findOne({ _id: req.params.id }).then((sauce) => {
     // Si la sauce n'existe pas dans la BDD
@@ -212,4 +213,13 @@ exports.likeSauce = (req, res, next) => {
       res.status(200).json({ message: "Avis pris en compte" });
     });
   });
+=======
+  // Si la sauce n'existe pas dans la BDD
+  if (!sauce) {
+    // On renvoie le code 404 (Not Found) ainsi qu'une nouvelle erreur
+    res.status(404).json({
+      error: new Error("Cette sauce n'existe pas"),
+    });
+  }
+>>>>>>> refs/remotes/origin/main
 };
