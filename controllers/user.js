@@ -4,33 +4,62 @@ const bcrypt = require("bcrypt");
 // On importe le module jsonwebtoken qui génère un token
 const jwt = require("jsonwebtoken");
 
+// On importe le module password-validator pour définir la forme du MDP
+const passwordValidator = require("password-validator");
+
 // On importe le modèle d'utilisateur que l'on a créé
 const User = require("../models/User");
 
+// On crée un schéma pour le MDP puis on lui attribue des contraintes
+var schema = new passwordValidator();
+schema
+  // Longueur minimale de 8
+  .is()
+  .min(8)
+  // Longueur maximale de 100
+  .is()
+  .max(100)
+  // Contient au moins une majuscule
+  .has()
+  .uppercase()
+  // Contient au moins une minuscule
+  .has()
+  .lowercase()
+  // Contient au moins deux chiffres
+  .has()
+  .digits(2)
+  // Ne contient pas d'espace
+  .has()
+  .not()
+  .spaces(); // Should not have spaces
+
 // On définit la fonction qui permet de s'inscrire
 exports.signup = (req, res, next) => {
-  // On demande à bcrypt d'hasher 10 fois le mot de passe
-  // Plus de fois le MDP est hashé, plus il est sécurisé mais plus l'opération est longue à réaliser
-  bcrypt
-    .hash(req.body.password, 10)
-    .then((hash) => {
-      // On crée un nouvel utilisateur
-      const user = new User({
-        // L'email stocké dans la BDD est l'email saisi dans la requête
-        email: req.body.email,
-        // Le MDP stocké dans la BDD est le hash obtenu
-        password: hash,
-      });
-      // On sauvegarde l'utilisateur créé dans la BDD
-      user
-        .save()
-        // On renvoie le code 201 (Created) ainsi qu'un message de confirmation
-        .then(() => res.status(201).json({ message: "Utilisateur créé" }))
-        // On renvoie le code 400 (Bad Request) ainsi que l'erreur
-        .catch((error) => res.status(400).json({ error }));
-    })
-    // On renvoie le code 500 (Internal Server Error) ainsi que l'erreur
-    .catch((error) => res.status(500).json({ error }));
+  // On vérifie que le MDP vérifie bien les contraintes imposées
+  if (schema.validate(req.body.password)) {
+    // On demande à bcrypt d'hasher 10 fois le mot de passe
+    // Plus de fois le MDP est hashé, plus il est sécurisé mais plus l'opération est longue à réaliser
+    bcrypt
+      .hash(req.body.password, 10)
+      .then((hash) => {
+        // On crée un nouvel utilisateur
+        const user = new User({
+          // L'email stocké dans la BDD est l'email saisi dans la requête
+          email: req.body.email,
+          // Le MDP stocké dans la BDD est le hash obtenu
+          password: hash,
+        });
+        // On sauvegarde l'utilisateur créé dans la BDD
+        user
+          .save()
+          // On renvoie le code 201 (Created) ainsi qu'un message de confirmation
+          .then(() => res.status(201).json({ message: "Utilisateur créé" }))
+          // On renvoie le code 400 (Bad Request) ainsi que l'erreur
+          .catch((error) => res.status(400).json({ error }));
+      })
+      // On renvoie le code 500 (Internal Server Error) ainsi que l'erreur
+      .catch((error) => res.status(500).json({ error }));
+  }
 };
 
 // On définit la fonction qui permet de se connecter

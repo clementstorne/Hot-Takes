@@ -1,4 +1,4 @@
-// On importe le module bcrypt qui permet d'importer des fichiers
+// On importe le module multer qui permet d'importer des fichiers
 const multer = require("multer");
 
 // On ne peut pas accéder directement à l'extension du fichier

@@ -13,7 +13,6 @@ const userSchema = mongoose.Schema({
   password: { type: String, required: true },
 });
 
-// ???
 userSchema.plugin(uniqueValidator);
 
 // On exporte le modèle d'utilisateur créé
