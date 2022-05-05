@@ -5,7 +5,7 @@
 You will need to have Node and `npm` installed locally on your machine.
 From the `backend` folder, run `npm install`.
 
-### Connecting to MongoDB
+## Connecting to MongoDB
 
 You will need to create a `.env` file in the `backend` folder.
 That file will include 3 variables :
