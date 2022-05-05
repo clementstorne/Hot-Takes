@@ -83,6 +83,11 @@ exports.login = (req, res, next) => {
           res.status(200).json({
             // L'objet contient l'ID de l'utilisateur
             userId: user._id,
+            // L'email de l'utilisateur est partiellement caché
+            email: user.email.replace(
+              /(\w{3})[\w.-]+@[\w.-]+(\w{3}\.\w)/,
+              "$1***@***$2"
+            ),
             // On génère un token codé avec la chaîne de caractères "RANDOM_TOKEN_SECRET" qui a une validité de 24 heures
             token: jwt.sign(
               { userId: user._id },
