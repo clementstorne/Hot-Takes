@@ -17,10 +17,9 @@ module.exports = (req, res, next) => {
     if (req.body.userId && req.body.userId !== userId) {
       // On renvoie un message d'erreur
       throw "User ID non valable";
-    } else {
-      // Sinon, on permet de passer au middelware suivant
-      next();
     }
+    // Sinon, on permet de passer au middelware suivant
+    next();
   } catch (error) {
     // On renvoie le code 401 (Unauthorized) ainsi que l'erreur ou un message d'erreur
     res.status(401).json({ error: error | "Requête non authentifiée" });
