@@ -1,6 +1,8 @@
-.env
+*.env
 
 /backend/images
+/backend/node_modules
+/frontend/node_modules
 
 package-lock.json
 
@@ -27,7 +29,7 @@ yarn-error.log
 *.sublime-workspace
 
 # Visual Studio Code
-.vscode/*
+/frontend/.vscode
 !.vscode/settings.json
 !.vscode/tasks.json
 !.vscode/launch.json
